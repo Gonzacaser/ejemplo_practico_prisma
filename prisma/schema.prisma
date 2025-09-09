@@ -1,0 +1,56 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Character {
+  id            Int      @id @default(autoincrement())
+  name          String
+  level         Int
+  hp            Int
+  mana          Int
+  attack        Int
+
+  class         CharacterClass @relation(fields: [classId], references: [id])
+  classId       Int
+
+  items         Character_Items[]
+
+
+}
+
+model CharacterClass {
+  id            Int      @id @default(autoincrement())
+  name          String
+  description   String
+
+  characters    Character[]
+
+}
+
+model Item {
+  id            Int      @id @default(autoincrement())
+  name          String
+  description   String
+
+  characters    Character_Items[]
+}
+
+
+model Character_Items {
+  characterId   Int
+  itemId        Int
+
+  characters     Character @relation(fields: [characterId], references: [id])
+  items          Item      @relation(fields: [itemId], references: [id])
+
+  @@id([characterId, itemId])
+}
