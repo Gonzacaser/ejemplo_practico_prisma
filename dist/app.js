@@ -1,4 +1,3 @@
-// src/server.ts
 import express from 'express';
 import { PrismaClient } from '@prisma/client';
 import swaggerUi from 'swagger-ui-express';
@@ -82,7 +81,7 @@ app.post('/characters', async (req, res) => {
         res.json(character);
     }
     catch (err) {
-        res.status(400).json({ error: 'Error creando personaje', detail: String(err) });
+        res.status(400).json({ error: 'Error creando personaje', errorCode: err, detail: String(err) });
     }
 });
 // Listar personajes (búsqueda por nombre y/o classId)
