@@ -1,4 +1,3 @@
-// src/server.ts
 import express from 'express'
 import { PrismaClient, Prisma, Character, CharacterClass } from '@prisma/client'
 import swaggerUi from 'swagger-ui-express';
@@ -8,10 +7,11 @@ import { swaggerSpec } from './swagger.js';
 const prisma = new PrismaClient()
 const app = express()
 app.use(express.json())
-// Configuracion Swagger
 
+// Configuracion Swagger
 app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec, { explorer: true }));
 app.get('/docs.json', (_req, res) => res.json(swaggerSpec));
+
 /**
  * =========================
  * CharacterClass (clases)
@@ -50,7 +50,8 @@ app.post('/items', async (req, res) => {
   const { name, description } = req.body as CharacterClass
   try {
     const item = await prisma.item.create({
-      data: { name, description } })
+      data: { name, description }
+    })
     res.json(item)
   } catch (err) {
     res.status(400).json({ error: 'Error creando ítem', detail: String(err) })
@@ -78,7 +79,7 @@ app.post('/characters', async (req, res) => {
     mana,
     attack,
     classId,
-   
+
   } = req.body as Character
 
   try {
@@ -90,7 +91,7 @@ app.post('/characters', async (req, res) => {
         mana,
         attack,
         class: { connect: { id: Number(classId) } },
-        
+
       },
       include: {
         class: true,
